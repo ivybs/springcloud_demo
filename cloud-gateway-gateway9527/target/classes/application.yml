@@ -1,0 +1,51 @@
+server:
+  port: 9527
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由；只有这样才能进行负载均衡，不这样的话每次都需要指定端口号，无法进行正常的负载均衡
+      routes:
+        - id: payment_routh #路由的id，没有固定规则，但是要求唯一，建议配个服务名
+#          uri: http://localhost:8001 # 匹配后提供服务的路由地址
+          uri: lb://cloud-payment-service # 匹配后提供服务的路由地址
+          predicates:
+            - Path=/payment/lb/**  # 断言，路径相匹配的进行路由
+#            # a datetime (which is a java ZonedDateTime) 这里时间的要求是这个类型，可以新建实例并打印内容获取
+#            # 在指定时间后生效
+#            - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+#            # 在指定之间前生效
+#            - Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+#            # 在指定时间段内生效
+#            - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]
+#            # cookie就是一个键值对，键是username，值可以是一个值，也可以是一个正则表达式
+#            # localhost:9527/payment/lb --cookie "username=zzyy"
+#            - Cookie=username, zzyy
+#            # header就是一个键值对，键是X-Request-Id，值可以是一个值，也可以是一个正则表达式
+#            # localhost:9527/payment/lb -H "X-Request-Id:1234"
+#            - Header=X-Request-Id, \d+
+#            # payment1.somehost.org...才能断言成功进行对应服务的跳转
+#            - Host=**.somehost.org,**.anotherhost.org
+#            # 发送请求的方法作为断言判断的条件
+#            - Method=GET,POST
+#            # 支持传入两个参数，一个是属性名，一个为属性值，属性值可以是正则表达式
+#            # 要有参数名为username并且值还要符合正则表达式的要求（值为整数）才能路由
+#            # http://localhost:9527/paymeng/lb?username=31
+#            - Query=username, \d+
+        - id: payment_routh2
+#          uri: http://localhost:8001
+          uri: lb://cloud-payment-service # 匹配后提供服务的路由地址
+          predicates:
+            - Path=/payment/get/**
+eureka:
+  instance:
+    hostname: cloud-gateway-service
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+

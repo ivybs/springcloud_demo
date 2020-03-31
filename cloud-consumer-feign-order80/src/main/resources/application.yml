@@ -1,0 +1,24 @@
+server:
+  port: 80
+
+# 没有注册进eureka，只是一个消费者、客户端
+eureka:
+  client:
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/
+# 设置feign客户端超时时间（OpenFeign默认支持ribbon）
+ribbon:
+  # 指的是建立连接所用的时间，适用于网络状况正常的情况下
+  # 两端连接所用的时间
+  # feign的默认等待时间为1秒，当用时超过一秒将会报 read timeout的错
+  # 这里将建立连接的时长上限设置为5s
+  ReadTimeout: 5000
+  # 指的是建立连接后从服务器读取到可用资源所用时间
+  # 这里将实际从服务提供者中获取数据的时长上限设为5s
+  ConnectTimeout: 5000
+
+logging:
+  level:
+    # feign日志以什么级别监控哪个接口
+    com.atguigu.springcloud.service.PaymentFeignService: debug
