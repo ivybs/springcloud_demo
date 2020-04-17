@@ -28,6 +28,7 @@ public class OrderFeignController {
         // openfeign-ribbon，客户端一般默认等待一秒钟
         // 但是我们在服务提供者一段，使用sleep方法，使其运行了3秒
         log.info("**********feignTimeout");
+
 //        long id =3;
 //        CommonResult<Payment> paymentById = paymentFeignService.getPaymentById(id);
         return paymentFeignService.paymentFeignTimeout();
